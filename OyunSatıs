@@ -1,0 +1,239 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+
+namespace oyunsatis
+{
+    class Program
+    {
+        static decimal cuzdanbakiye;
+        static string kullaniciadi;
+        static string sifre;
+        static string admin;
+        static string dogrusifre;
+        static DateTime kayittarihi;
+        static List<string> kutuphane = new List<string>();
+
+        static void Main(string[] args)
+        {
+            oyunsatis();
+        }
+
+        static void oyunsatis()
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine("------------------------");
+                    Console.WriteLine("Oyun Satış'a Hoşgeldiniz");
+                    Console.WriteLine("------------------------");
+                    Console.WriteLine("Giriş yapmak için 1'i & Kayıt olmak için 2'yi tuşlayınız:");
+                    string uyesecimi = Console.ReadLine();
+
+                    if (uyesecimi == "2")
+                    {
+                        Console.WriteLine("Kullanıcı Adınızı Giriniz:");
+                        admin = Console.ReadLine();
+
+                        Console.WriteLine("Şifrenizi Giriniz:");
+                        dogrusifre = Console.ReadLine();
+
+                        kayittarihi = DateTime.Now;
+
+                        Console.WriteLine("Kayıt Başarılı, Lütfen giriş yapınız.");
+                    }
+                    else if (uyesecimi == "1")
+                    {
+                        Console.WriteLine("Kullanıcı Adınızı Giriniz:");
+                        kullaniciadi = Console.ReadLine();
+
+                        Console.WriteLine("Şifrenizi Giriniz:");
+                        sifre = Console.ReadLine();
+
+                        if (kullaniciadi == admin && sifre == dogrusifre)
+                        {
+                            Console.WriteLine("Giriş Başarılı!");
+                            Console.WriteLine("Hoşgeldiniz, " + kullaniciadi);
+                            cuzdanbakiye = 100.50m;
+                            Console.WriteLine("Bakiyeniz: " + cuzdanbakiye + " TL");
+
+                            while (true)
+                            {
+                                Console.WriteLine("\n1 - Profil");
+                                Console.WriteLine("2 - Oyun Listesine Göz At");
+                                Console.WriteLine("3 - Kütüphane");
+                                Console.WriteLine("4 - Bakiye Yükle");
+                                Console.WriteLine("5 - Kullanıcı Adı veya Şifre Değiştir");
+                                Console.WriteLine("6 - Son Güncellemeler");
+                                Console.WriteLine("7 - Çıkış");
+
+                                if (int.TryParse(Console.ReadLine(), out int hesapIslemleri))
+                                {
+                                    if (hesapIslemleri == 1) Profil();
+                                    else if (hesapIslemleri == 2) oyunlistesi();
+                                    else if (hesapIslemleri == 3) Kutuphane();
+                                    else if (hesapIslemleri == 4) BakiyeYukle();
+                                    else if (hesapIslemleri == 5) KullaniciAdiSifreDegistir();
+                                    else if (hesapIslemleri == 6) SonGuncellemeler();
+                                    else if (hesapIslemleri == 7) break;
+                                    else Console.WriteLine("Hatalı giriş yaptınız, lütfen 1-7 arasında bir sayı giriniz.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Lütfen geçerli bir sayı giriniz.");
+                                }
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Kullanıcı Adı veya Şifre Hatalı, tekrar deneyin.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Hatalı giriş yaptınız, lütfen 1 veya 2 giriniz.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Bir hata oluştu: " + ex.Message);
+                }
+            }
+        }
+
+        static void Profil()
+        {
+            Console.WriteLine("Profil bilgileri:");
+            Console.WriteLine("Kullanıcı adı: " + kullaniciadi);
+            Console.WriteLine("Kayıt tarihi: " + kayittarihi);
+            Console.WriteLine("Bakiye: " + cuzdanbakiye + " TL");
+        }
+
+        static void oyunlistesi()
+        {
+            string[] oyunlar = { "GTA 5", "Minecraft", "Cyberpunk 2077", "Red Dead Redemption 2", "The Witcher 3", "The Elder Scrolls V: Skyrim", "Dark Souls 3", "Sekiro: Shadows Die Twice", "Assassin's Creed Valhalla", "Call of Duty: Warzone" };
+
+            Console.WriteLine("\nOyun Listesi:");
+            for (int i = 0; i < oyunlar.Length; i++)
+            {
+                Console.WriteLine($"{i + 1} - {oyunlar[i]}");
+            }
+            Console.WriteLine("11 - Geri dön");
+
+            Console.WriteLine("Lütfen Kütüphanenize eklemek istediğiniz oyunun numarasını girin:");
+            if (int.TryParse(Console.ReadLine(), out int oyunsecim) && oyunsecim >= 1 && oyunsecim <= 10)
+            {
+                string secilenOyun = oyunlar[oyunsecim - 1];
+                if (!kutuphane.Contains(secilenOyun))
+                {
+                    kutuphane.Add(secilenOyun);
+                    Console.WriteLine($"{secilenOyun} kütüphanenize eklendi!");
+                }
+                else
+                {
+                    Console.WriteLine("Bu oyuna zaten sahipsiniz!");
+                }
+            }
+            else if (oyunsecim == 11)
+            {
+                Console.WriteLine("Menüye dönülüyor...");
+                Thread.Sleep(2000);
+            }
+            else
+            {
+                Console.WriteLine("Geçersiz seçim.");
+            }
+        }
+
+        static void Kutuphane()
+        {
+            Console.WriteLine("\nKütüphaneniz:");
+            if (kutuphane.Count == 0)
+            {
+                Console.WriteLine("Henüz kütüphanenizde oyun yok.");
+            }
+            else
+            {
+                foreach (var oyun in kutuphane)
+                {
+                    Console.WriteLine("- " + oyun);
+                }
+            }
+        }
+            
+        
+    
+
+
+static void BakiyeYukle()
+        {
+            Console.WriteLine("Yüklenecek miktarı girin:");
+            if (decimal.TryParse(Console.ReadLine(), out decimal yuklenecekMiktar))
+            {
+                cuzdanbakiye += yuklenecekMiktar;
+                Console.WriteLine("Yükleme işlemi başarılı! Yeni bakiyeniz: " + cuzdanbakiye + " TL");
+            }
+            else
+            {
+                Console.WriteLine("Geçersiz giriş, lütfen bir sayı giriniz.");
+            }
+        }
+
+        static void KullaniciAdiSifreDegistir()
+        {
+            Console.WriteLine("Kullanıcı adınızı mı yoksa şifrenizi mi değiştirmek istiyorsunuz? (k/s)");
+            string secim = Console.ReadLine();
+            if (secim == "k")
+            {
+                Console.WriteLine("Yeni kullanıcı adınızı girin:");
+                kullaniciadi = Console.ReadLine();
+            }
+            else if (secim == "s")
+            {
+                Console.WriteLine("Mevcut şifrenizi girin:");
+                string mevcutSifre = Console.ReadLine();
+                if (mevcutSifre != sifre)
+                {
+                    Console.WriteLine("Hatalı şifre girişi!");
+                    return;
+                }
+                Console.WriteLine("Yeni şifrenizi girin:");
+                sifre = Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("Hatalı seçim!");
+                return;
+            }
+            Console.WriteLine("Kullanıcı adı ve şifre değiştirildi!");
+        }
+
+        static void SonGuncellemeler()
+        {
+            Console.WriteLine("Son güncellemeler:");
+            Console.WriteLine("1.0.1 - Hata düzeltmeleri yapıldı.");
+            Console.WriteLine("1.0.2 - Performans iyileştirmeleri yapıldı.");
+            Console.WriteLine("1.0.3 - Yeni oyunlar eklendi.");
+            Console.WriteLine("1.0.4 - Yeni özellikler eklendi.");
+            Console.WriteLine("1.0.5 - Güvenlik güncellemeleri yapıldı.");
+            Console.WriteLine("Son güncellemeler:");
+            Console.WriteLine("Geri dönmek için 0'ı tuşlayınız.");
+
+            while (true)
+            {
+                string giris = Console.ReadLine();
+
+                if (giris == "0")
+                {
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Hatalı giriş yaptınız, lütfen 0 giriniz.");
+                }
+            }
+        }
+    }
+}
